@@ -131,7 +131,9 @@ function gogolize(str) {
 
 async function prismCallback(client, target, command, args) {
   if (args.length === 0) {
-    client.sendMessage(colorString(USAGE, Color.Red), target.chan);
+    for (const line of USAGE.split("\n")) {
+      client.sendMessage(colorString(line, Color.Red), target.chan);
+    }
     return;
   }
 
