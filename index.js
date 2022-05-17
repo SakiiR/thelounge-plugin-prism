@@ -1,6 +1,45 @@
 let thelounge = null;
+let USAGE = `
+Usage: /prism [-rwmbkg] [-re] [message...]
+
+-r, -random: Randomize colors
+-m, -me: Prepend /me to your message
+-b, -background, : Randomize background color as well
+-k, -black: Black background
+-re, -reverse: Reverse string
+
+-g, -gogolize: Gogolize string 
+
+> gogolize("Bonjour, mon nom est SakiiR")
+'BoNjOuR, mOn nOm eSt sAkIiR'
+`;
+
+function parseOptions(args) {
+  const options = args
+    .filter((arg) => arg.startsWith("-"))
+    .map((o) => o.replace(/^\-/gi, ""));
+
+  const hasRandom = !!options.find((o) => o === "r" || o === "random");
+  const hasMe = !!options.find((o) => o === "m" || o === "me");
+  const hasReverse = !!options.find((o) => o === "re" || o === "reverse");
+  const hasChaoticBgColors = !!options.find(
+    (o) => o === "b" || o === "background"
+  );
+  const hasBlackBg = !!options.find((o) => o === "k" || o === "black");
+  const hasGolgolize = !!options.find((o) => o === "g" || o === "gogolize");
+
+  return {
+    hasRandom,
+    hasMe,
+    hasReverse,
+    hasChaoticBgColors,
+    hasBlackBg,
+    hasGolgolize,
+  };
+}
 
 class Color {
+  static Black = 1;
   static Red = 5;
   static LightRed = 4;
   static Brown = 7;
@@ -30,13 +69,35 @@ const colors = [
   Color.LightMagenta,
 ];
 
-function colorStringProgressively(str, options = {}) {
+function pickRandomColor() {
+  return colors[getRandomInt(colors.length)];
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function colorMessage(str, options = {}) {
   let output = "";
   let index = 0;
 
   for (const c of str) {
-    const colorStr = colors[index % colors.length].toString().padStart(2, "0");
-    output += `\x03${colorStr}${c}`;
+    let colorStr = colors[index % colors.length].toString().padStart(2, "0");
+    if (options.hasRandom) {
+      colorStr = pickRandomColor().toString().padStart(2, "0");
+    }
+    output += `\x03${colorStr}`;
+
+    if (options.hasBlackBg) {
+      output += ",";
+      output += Color.Black.toString().padStart(2, "0");
+    } else if (options.hasChaoticBgColors) {
+      output += ",";
+      output += pickRandomColor().toString().padStart(2, "0");
+    }
+
+    output += `${c}`;
+
     ++index;
   }
 
@@ -57,15 +118,38 @@ function colorString(str, color) {
   return `${pickColor(color)}${str}`;
 }
 
+function reverseStr(str) {
+  return str.split("").reverse().join("");
+}
+
+function gogolize(str) {
+  return str
+    .split("")
+    .map((c, i) => (i % 2 == 0 ? c.toUpperCase() : c.toLowerCase()))
+    .join("");
+}
+
 async function prismCallback(client, target, command, args) {
   if (args.length === 0) {
-    client.sendMessage(colorString(`Usage: /prism [message...]`, Color.Red), target.chan);
+    client.sendMessage(colorString(USAGE, Color.Red), target.chan);
     return;
   }
 
-  const message = args.filter((arg) => !arg.startsWith("-")).join(" ");
+  let message = args.filter((arg) => !arg.startsWith("-")).join(" ");
 
-  client.runAsUser(colorStringProgressively(message), target.chan.id);
+  const options = parseOptions(args);
+
+  if (options.hasReverse) message = reverseStr(message);
+
+  message = colorMessage(message, options);
+
+  if (options.hasGolgolize) message = gogolize(message);
+
+  if (options.hasMe) {
+    message = `/me ${message}`;
+  }
+
+  client.runAsUser(message, target.chan.id);
 }
 
 const options = {
