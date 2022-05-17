@@ -1,10 +1,15 @@
 {
   "name": "thelounge-plugin-prism",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Simple plugin for the irc client thelounge that allows you to apply rainbow color to a message",
   "main": "index.js",
-  "author": "SakiiR",
+  "author": "SakiiR <sakiir@protonmail.com>",
   "license": "MIT",
+  "homepage": "https://github.com/SakiiR/thelounge-plugin-prism",
+  "repository": "https://github.com/SakiiR/thelounge-plugin-prism",
+  "bugs": {
+    "url": "https://github.com/SakiiR/thelounge-plugin-prism/issues"
+  },
   "keywords": [
     "thelounge",
     "thelounge-plugin"
