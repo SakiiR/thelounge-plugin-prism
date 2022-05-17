@@ -16,6 +16,12 @@ Simple plugin for the irc client [thelounge](https://thelounge.chat) that allows
 
 `/prism [message...]` -> Color your message
 
+```
+/prism -b -g -r 'Notfound c'est bon je peux prism depuis thelounge'
+```
+
+![screenshot](screenshot.png)
+
 # Development
 
 Currently thelounge doesn't offer a way to install packages from source without npm,
