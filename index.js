@@ -139,13 +139,13 @@ async function prismCallback(client, target, command, args) {
 
   let message = args.filter((arg) => !arg.startsWith("-")).join(" ");
 
+  if (options.hasGolgolize) message = gogolize(message);
+
   const options = parseOptions(args);
 
   if (options.hasReverse) message = reverseStr(message);
 
   message = colorMessage(message, options);
-
-  if (options.hasGolgolize) message = gogolize(message);
 
   if (options.hasMe) {
     message = `/me ${message}`;
