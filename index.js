@@ -1,7 +1,7 @@
 let thelounge = null;
 let USAGE = `
 Usage: /prism [-rwmbkg] [-re] [message...]
-
+ 
 -r, -random: Randomize colors
 -m, -me: Prepend /me to your message
 -b, -background: Randomize background color as well
@@ -14,11 +14,14 @@ Usage: /prism [-rwmbkg] [-re] [message...]
 'BoNjOuR, mOn nOm eSt sAkIiR'
 `;
 
+const { version: VERSION } = require("./package.json");
+
 function parseOptions(args) {
   const options = args
     .filter((arg) => arg.startsWith("-"))
     .map((o) => o.replace(/^\-/gi, ""));
 
+  const hasVersion = !!options.find((o) => o === "v" || o === "version");
   const hasRandom = !!options.find((o) => o === "r" || o === "random");
   const hasMe = !!options.find((o) => o === "m" || o === "me");
   const hasReverse = !!options.find((o) => o === "re" || o === "reverse");
@@ -32,6 +35,7 @@ function parseOptions(args) {
   );
 
   return {
+    hasVersion,
     hasRandom,
     hasMe,
     hasReverse,
@@ -144,6 +148,13 @@ async function prismCallback(client, target, command, args) {
   const options = parseOptions(args);
 
   let message = args.filter((arg) => !arg.startsWith("-")).join(" ");
+
+  if (options.hasVersion) {
+    return client.sendMessage(
+      colorString(`Version: ${VERSION}`, Color.Green),
+      target.chan
+    );
+  }
 
   if (options.hasGolgolize) message = gogolize(message);
   if (options.hasReverse) message = reverseStr(message);
