@@ -6,6 +6,7 @@ Usage: /prism [-rwmbkg] [-re] [message...]
 -m, -me: Prepend /me to your message
 -b, -background, : Randomize background color as well
 -k, -black: Black background
+-n, -nocolor: disable coloration
 -re, -reverse: Reverse string
 
 -g, -gogolize: Gogolize string 
@@ -27,6 +28,9 @@ function parseOptions(args) {
   );
   const hasBlackBg = !!options.find((o) => o === "k" || o === "black");
   const hasGolgolize = !!options.find((o) => o === "g" || o === "gogolize");
+  const hasDisableColoration = !!options.find(
+    (o) => o === "n" || o === "nocolor"
+  );
 
   return {
     hasRandom,
@@ -35,6 +39,7 @@ function parseOptions(args) {
     hasChaoticBgColors,
     hasBlackBg,
     hasGolgolize,
+    hasDisableColoration,
   };
 }
 
@@ -137,15 +142,15 @@ async function prismCallback(client, target, command, args) {
     return;
   }
 
+  const options = parseOptions(args);
+
   let message = args.filter((arg) => !arg.startsWith("-")).join(" ");
 
   if (options.hasGolgolize) message = gogolize(message);
 
-  const options = parseOptions(args);
-
   if (options.hasReverse) message = reverseStr(message);
 
-  message = colorMessage(message, options);
+  if (!options.hasDisableColoration) message = colorMessage(message, options);
 
   if (options.hasMe) {
     message = `/me ${message}`;
