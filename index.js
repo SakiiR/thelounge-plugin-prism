@@ -8,7 +8,6 @@ Usage: /prism [-rwmbkg] [-re] [message...]
 -k, -black: Black background
 -n, -nocolor: disable coloration
 -re, -reverse: Reverse string
-
 -g, -gogolize: Gogolize string 
 
 > gogolize("Bonjour, mon nom est SakiiR")
@@ -147,14 +146,9 @@ async function prismCallback(client, target, command, args) {
   let message = args.filter((arg) => !arg.startsWith("-")).join(" ");
 
   if (options.hasGolgolize) message = gogolize(message);
-
   if (options.hasReverse) message = reverseStr(message);
-
   if (!options.hasDisableColoration) message = colorMessage(message, options);
-
-  if (options.hasMe) {
-    message = `/me ${message}`;
-  }
+  if (options.hasMe) message = `/me ${message}`;
 
   client.runAsUser(message, target.chan.id);
 }
