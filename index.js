@@ -2,6 +2,7 @@ let thelounge = null;
 let USAGE = `
 Usage: /prism [-rwmbkg] [-re] [message...]
  
+-v, -version: Display plugin version
 -r, -random: Randomize colors
 -m, -me: Prepend /me to your message
 -b, -background: Randomize background color as well
