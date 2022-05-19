@@ -4,7 +4,7 @@ Usage: /prism [-rwmbkg] [-re] [message...]
 
 -r, -random: Randomize colors
 -m, -me: Prepend /me to your message
--b, -background, : Randomize background color as well
+-b, -background: Randomize background color as well
 -k, -black: Black background
 -n, -nocolor: disable coloration
 -re, -reverse: Reverse string
