@@ -1,7 +1,7 @@
 let thelounge = null;
 let USAGE = `
 Usage: /prism [-rwmbkg] [-re] [message...]
- 
+
 -v, -version: Display plugin version
 -r, -random: Randomize colors
 -m, -me: Prepend /me to your message
@@ -9,7 +9,7 @@ Usage: /prism [-rwmbkg] [-re] [message...]
 -k, -black: Black background
 -n, -nocolor: disable coloration
 -re, -reverse: Reverse string
--g, -gogolize: Gogolize string 
+-g, -gogolize: Gogolize string
 
 > gogolize("Bonjour, mon nom est SakiiR")
 'BoNjOuR, mOn nOm eSt sAkIiR'
