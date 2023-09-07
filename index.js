@@ -1,7 +1,7 @@
 let thelounge = null;
 let USAGE = `
 Usage: /prism [-rwmbkg] [-re] [message...]
- 
+
 -v, -version: Display plugin version
 -r, -random: Randomize colors
 -m, -me: Prepend /me to your message
@@ -9,7 +9,8 @@ Usage: /prism [-rwmbkg] [-re] [message...]
 -k, -black: Black background
 -n, -nocolor: disable coloration
 -re, -reverse: Reverse string
--g, -gogolize: Gogolize string 
+-g, -gogolize: Gogolize string
+-usa, -usa: 🇺🇸
 
 > gogolize("Bonjour, mon nom est SakiiR")
 'BoNjOuR, mOn nOm eSt sAkIiR'
@@ -29,6 +30,7 @@ function parseOptions(args) {
   const hasChaoticBgColors = !!options.find(
     (o) => o === "b" || o === "background"
   );
+  const hasUsa = !!options.find((o) => o === "usa");
   const hasBlackBg = !!options.find((o) => o === "k" || o === "black");
   const hasGolgolize = !!options.find((o) => o === "g" || o === "gogolize");
   const hasDisableColoration = !!options.find(
@@ -41,6 +43,7 @@ function parseOptions(args) {
     hasMe,
     hasReverse,
     hasChaoticBgColors,
+    hasUsa,
     hasBlackBg,
     hasGolgolize,
     hasDisableColoration,
@@ -77,6 +80,7 @@ const colors = [
   Color.Magenta,
   Color.LightMagenta,
 ];
+const usaColors = [Color.Red, Color.White, Color.Blue];
 
 function pickRandomColor() {
   return colors[getRandomInt(colors.length)];
@@ -94,6 +98,8 @@ function colorMessage(str, options = {}) {
     let colorStr = colors[index % colors.length].toString().padStart(2, "0");
     if (options.hasRandom) {
       colorStr = pickRandomColor().toString().padStart(2, "0");
+    } else if (options.hasUsa) {
+      colorStr = usaColors[index % usaColors.length].toString().padStart(2, "0");
     }
     output += `\x03${colorStr}`;
 
